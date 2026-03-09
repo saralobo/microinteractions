@@ -21,53 +21,35 @@ It's the *behavior layer* that sits on top of your existing components.
 ## Quick Start
 
 1. **For AI agents**: Read [`AGENT.md`](./AGENT.md) first. It contains the conversation strategy and decision tree.
-2. **For humans**: Browse [`patterns/`](./patterns/) and find your component type.
-3. **For theory**: Read [`theory/`](./theory/) to understand the foundational model.
-4. **For visible motion** (chart build-in, stagger, count-up, progress ring): Read [`theory/motion-patterns.md`](./theory/motion-patterns.md).
+2. **Perception first**: Read [`theory/perception-and-motion.md`](./theory/perception-and-motion.md) to ground motion in *how we perceive it* — attention (we look at what moves), easing (smooth vs linear vs abrupt), timing and spacing. Start here before applying any motion.
+3. **For humans**: Browse [`patterns/`](./patterns/) and find your component type.
+4. **For theory**: Read [`theory/`](./theory/) to understand the foundational model.
+5. **For visible motion** (chart build-in, stagger, count-up, progress ring): Read [`theory/motion-patterns.md`](./theory/motion-patterns.md).
 
 ## Repository Structure
 
 ```
 microinteractions/
-├── AGENT.md                  # AI agent entry point + conversation strategy
-├── README.md                 # This file
+├── AGENT.md                    # AI agent entry point + conversation strategy
+├── README.md                   # This file
 ├── theory/
-│   ├── saffer-model.md       # The 4-part model: Triggers → Rules → Feedback → Loops & Modes
-│   ├── timing-and-easing.md  # Duration, easing curves, per-device guidelines
-│   ├── principles.md         # UX laws, accessibility, signature moments
-│   ├── platform-rules.md     # Mobile vs Desktop vs Responsive (hover, touch, cursor)
-│   └── motion-patterns.md    # Chart build-in, stagger reveal, count-up, progress ring, layered reveal
+│   ├── perception-and-motion.md # Why motion works: attention, easing, timing+spacing (read first)
+│   ├── saffer-model.md         # The 4-part model: Triggers, Rules, Feedback, Loops & Modes
+│   ├── timing-and-easing.md    # Duration, easing curves, per-device guidelines
+│   ├── principles.md           # UX laws, accessibility, signature moments
+│   ├── platform-rules.md       # Mobile vs Desktop vs Responsive (hover, touch, cursor)
+│   └── motion-patterns.md      # Chart build-in, stagger reveal, count-up, progress ring, layered reveal
 └── patterns/
-    ├── README.md             # Index + intent-to-pattern mapping
-    ├── button.md
-    ├── input.md
-    ├── toggle.md
-    ├── card.md
-    ├── toast.md
-    ├── modal.md
-    ├── dropdown.md
-    ├── skeleton.md
-    ├── progress.md
-    ├── fab.md
-    ├── tooltip.md
-    └── navigation.md
+    ...
 ```
 
 ## The Saffer Model (TL;DR)
 
-Every microinteraction has four parts:
-
-| Part | What it does | Example |
-|------|--------------|---------|
-| **Trigger** | Initiates the interaction | User clicks a button |
-| **Rules** | Defines what happens | Button becomes disabled, shows spinner |
-| **Feedback** | Communicates the rules to the user | Spinner animation, "Saving..." text |
-| **Loops & Modes** | Meta-rules over time | After 3 uses, skip the confirmation |
+Every microinteraction has four parts: **Trigger** (what starts it), **Rules** (what happens), **Feedback** (what the user sees/feels), **Loops & Modes** (over time).
 
 ## Design Philosophy
 
-> *"The details are not the details. They make the design."* — Charles Eames
-
+- **Perception-first**: Motion draws the eye — use it with intent. Ask: What should the user notice? Does this movement have service meaning? See [`theory/perception-and-motion.md`](./theory/perception-and-motion.md).
 - **Immediate**: Feedback under 100 ms for direct manipulation.
 - **Subtle**: A 2% scale change is felt; a 20% scale change is distracting.
 - **Consistent**: Same component, same behavior, everywhere.
@@ -76,15 +58,7 @@ Every microinteraction has four parts:
 
 ## Motion & animation (beyond microinteractions)
 
-When the goal is **visible motion** — charts that build in, numbers that count up, cards that stagger in, progress rings that fill — use [`theory/motion-patterns.md`](./theory/motion-patterns.md). It covers:
-
-- **Chart build-in**: Bars/area/line animate from baseline on load (800–1200 ms).
-- **Staggered reveal**: Lists and grids enter with 30–80 ms delay between items (max 10–15 items).
-- **Count-up**: Key metrics animate from 0 to value (1.5–2 s).
-- **Progress ring fill**: Circular progress draws from 0% to target (500–800 ms).
-- **Layered reveal**, **state-to-state continuity**, **alert-first motion**.
-
-Motion should be a **clarity layer**, not decoration. All patterns respect `prefers-reduced-motion`.
+When the goal is **visible motion**, use [`theory/motion-patterns.md`](./theory/motion-patterns.md): chart build-in, staggered reveal, count-up, progress ring fill, layered reveal. Motion should be a **clarity layer**, not decoration. All patterns respect `prefers-reduced-motion`.
 
 ## References
 
