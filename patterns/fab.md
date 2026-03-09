@@ -4,6 +4,22 @@ Microinteraction patterns for floating action buttons and speed dials.
 
 ---
 
+## Platform Notes
+
+| Intent | Mobile | Desktop | Responsive |
+|--------|--------|---------|------------|
+| Press (tap/click) | `:active` scale 0.92–0.95 | `:active` + hover prestate | Both |
+| Hover (scale up) | **Not applicable** | `:hover` scale 1.05 | `@media (hover: hover)` only |
+| Expand / Speed Dial | Tap | Click | Both |
+| Morph | Same | Same | Same |
+| Scroll behavior | Show/hide on scroll | Optional | Same |
+
+**On mobile**: skip hover (Section 3 on desktop). The FAB responds only to tap (`:active`). Do not apply scale-up on hover.
+
+**On responsive**: wrap hover in `@media (hover: hover) and (pointer: fine) { }`.
+
+---
+
 ## 1. Idle
 
 | Property | Value |
@@ -17,6 +33,8 @@ Microinteraction patterns for floating action buttons and speed dials.
 
 ## 2. Press
 
+**Platform**: All.
+
 **Trigger**: `mousedown` / `touchstart`.
 
 | Property | Press value | Duration | Easing |
@@ -25,9 +43,37 @@ Microinteraction patterns for floating action buttons and speed dials.
 | `box-shadow` | Reduce elevation | 80–120 ms | ease-out |
 | Ripple (opt.) | Circular from touch point | 300–400 ms | deceleration |
 
+**Mobile-specific**: add `-webkit-tap-highlight-color: transparent`.
+
 ---
 
-## 3. Expand / Speed Dial
+## 3. Hover
+
+**Platform**: Desktop only. Skip on mobile. Wrap in `@media (hover: hover)` for responsive.
+
+**Trigger**: `mouseenter` / `:hover`.
+
+| Property | Hover value | Duration | Easing |
+|----------|------------|----------|--------|
+| `transform: scale` | 1.05 | 120–150 ms | ease-out |
+| `box-shadow` | Increase elevation | 120–150 ms | ease-out |
+| `cursor` | `pointer` | instant | — |
+
+**Responsive pattern**:
+```
+@media (hover: hover) and (pointer: fine) {
+  .fab:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
+  }
+}
+```
+
+---
+
+## 4. Expand / Speed Dial
+
+**Platform**: All.
 
 **Trigger**: Click/tap.
 
@@ -50,7 +96,9 @@ Microinteraction patterns for floating action buttons and speed dials.
 
 ---
 
-## 4. Morph
+## 5. Morph
+
+**Platform**: All.
 
 **Intent**: FAB transforms into another element (toolbar, form, card).
 
@@ -63,7 +111,9 @@ Microinteraction patterns for floating action buttons and speed dials.
 
 ---
 
-## 5. Scroll Behavior
+## 6. Scroll Behavior
+
+**Platform**: All (especially common on mobile).
 
 - **Scroll down**: Hide (translateY 80px + fade, 200 ms, acceleration).
 - **Scroll up**: Show (translateY 0 + fade in, 250 ms, deceleration).
@@ -84,6 +134,8 @@ Microinteraction patterns for floating action buttons and speed dials.
 
 ```
 idle --> pressed --> action
+  |
+  +--> hover (desktop only) --> pressed --> action
   |
   +--> expanded (speed dial) --> action --> idle
   |         |

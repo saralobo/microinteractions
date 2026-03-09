@@ -4,7 +4,26 @@ Microinteraction patterns for text inputs, textareas, search fields, and form fi
 
 ---
 
+## Platform Notes
+
+| Intent | Mobile | Desktop | Responsive |
+|--------|--------|---------|------------|
+| Focus | Tap to focus (keyboard slides up) | Click or Tab | Both |
+| Hover (border change) | **Not applicable** | `:hover` border color change | `@media (hover: hover)` only |
+| Validation | Same | Same | Same |
+| Disabled cursor | No cursor | `cursor: not-allowed` | `@media (pointer: fine)` for cursor |
+
+**On mobile**: the virtual keyboard appearing is itself significant feedback. Focus ring and border change work the same.
+
+**On desktop**: inputs also get a subtle `:hover` state (border color change) before focus.
+
+**On responsive**: wrap hover border in `@media (hover: hover) and (pointer: fine) { }`.
+
+---
+
 ## 1. Focus
+
+**Platform**: All.
 
 **Intent**: Clearly indicate which field the user is interacting with.
 
@@ -19,13 +38,38 @@ Microinteraction patterns for text inputs, textareas, search fields, and form fi
 | `outline` | none (replaced by border/shadow) | instant | — |
 | Floating label | translate up, scale 0.85 | 150–200 ms | ease-out |
 
+**Mobile-specific**: virtual keyboard slides up — ensure the focused input is scrolled into view.
+
 **Accessibility**:
 - Never remove outline without equivalent visible indicator.
 - Focus ring contrast: 3:1 minimum (WCAG 2.2).
 
 ---
 
-## 2. Blur
+## 2. Hover
+
+**Platform**: Desktop only. Skip on mobile. Wrap in `@media (hover: hover)` for responsive.
+
+**Trigger**: `mouseenter` / `:hover` (before focus).
+
+| Property | Hover value | Duration | Easing |
+|----------|------------|----------|--------|
+| `border-color` | Slightly more prominent (e.g., 20–30% lighter/darker) | 100–150 ms | ease-in-out |
+
+**Responsive pattern**:
+```
+@media (hover: hover) and (pointer: fine) {
+  .input:hover:not(:focus) {
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+}
+```
+
+---
+
+## 3. Blur
+
+**Platform**: All.
 
 **Intent**: Return to resting state; optionally trigger validation.
 
@@ -42,7 +86,9 @@ Microinteraction patterns for text inputs, textareas, search fields, and form fi
 
 ---
 
-## 3. Inline Validation (Real-time)
+## 4. Inline Validation (Real-time)
+
+**Platform**: All.
 
 **Intent**: Immediate feedback about input validity.
 
@@ -72,7 +118,9 @@ Microinteraction patterns for text inputs, textareas, search fields, and form fi
 
 ---
 
-## 4. Error (on Submit)
+## 5. Error (on Submit)
+
+**Platform**: All.
 
 Same as invalid above, but triggered on form submit. Additional:
 - Scroll to first error field.
@@ -81,17 +129,21 @@ Same as invalid above, but triggered on form submit. Additional:
 
 ---
 
-## 5. Disabled
+## 6. Disabled
+
+**Platform**: All (with cursor differences).
 
 | Property | Value | Transition |
 |----------|-------|----------|
 | `opacity` | 0.5–0.6 | 150 ms |
 | `background-color` | light gray | 150 ms |
-| `cursor` | `not-allowed` | instant |
+| `cursor` | `not-allowed` (desktop only) | instant |
 
 ---
 
-## 6. Filled / Has Value
+## 7. Filled / Has Value
+
+**Platform**: All.
 
 | Property | Value | Duration |
 |----------|-------|----------|
@@ -100,7 +152,9 @@ Same as invalid above, but triggered on form submit. Additional:
 
 ---
 
-## 7. Password Strength Meter
+## 8. Password Strength Meter
+
+**Platform**: All.
 
 **Trigger**: Each keystroke in password field.
 
@@ -116,7 +170,9 @@ Criteria: length >= 8, uppercase, lowercase, number, special char.
 
 ---
 
-## 8. Character Count
+## 9. Character Count
+
+**Platform**: All.
 
 | Remaining | Color | Animation |
 |-----------|-------|-----------|
@@ -130,9 +186,11 @@ Criteria: length >= 8, uppercase, lowercase, number, special char.
 ## State Machine
 
 ```
-default --+-- focus --+-- typing --+-- valid --> (blur) --> filled
-          |           |            +-- invalid --> error
-          |           |            +-- validating (async) --> valid / invalid
-          |           +-- (blur, empty) --> default
+          +-- hover (desktop only) --+
+          |                          |
+default --+--------------------------+-- focus --+-- typing --+-- valid --> (blur) --> filled
+          |                                      |            +-- invalid --> error
+          |                                      |            +-- validating (async) --> valid / invalid
+          |                                      +-- (blur, empty) --> default
           +-- disabled
 ```

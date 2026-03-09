@@ -4,7 +4,26 @@ Microinteraction patterns for buttons (primary, secondary, icon buttons, CTAs, s
 
 ---
 
+## Platform Notes
+
+| Intent | Mobile | Desktop | Responsive |
+|--------|--------|---------|------------|
+| Click / Tap feedback | `:active` only | `:active` + `:hover` | Both |
+| Hover | **Not applicable** | `:hover` | `@media (hover: hover)` only |
+| Loading | Same | Same | Same |
+| Success | Same | Same | Same |
+| Error | Same | Same | Same |
+| Disabled | No `cursor` change | `cursor: not-allowed` | `@media (pointer: fine)` for cursor |
+
+**On mobile**: skip Section 2 (Hover) entirely. Tap feedback (`:active`) is the primary interaction.
+
+**On responsive**: wrap hover styles in `@media (hover: hover) and (pointer: fine) { }` so they only apply on devices with a real pointer.
+
+---
+
 ## 1. Click / Tap Feedback
+
+**Platform**: All (mobile, desktop, responsive).
 
 **Intent**: The user feels the button physically respond to their press.
 
@@ -14,6 +33,7 @@ Microinteraction patterns for buttons (primary, secondary, icon buttons, CTAs, s
 - On press: scale down slightly, darken background.
 - On release: return to default.
 - Must happen within 50 ms of the press event.
+- **Mobile**: add `-webkit-tap-highlight-color: transparent` to remove default browser highlight.
 
 **Feedback specification**:
 
@@ -36,6 +56,8 @@ Microinteraction patterns for buttons (primary, secondary, icon buttons, CTAs, s
 
 ## 2. Hover
 
+**Platform**: Desktop only. Skip on mobile. Wrap in `@media (hover: hover)` for responsive.
+
 **Intent**: Signal interactivity before the user commits to clicking.
 
 **Trigger**: `mouseenter` / `:hover` (desktop only).
@@ -49,6 +71,16 @@ Microinteraction patterns for buttons (primary, secondary, icon buttons, CTAs, s
 | `transform: translateY` (opt.) | -1 px | 100–150 ms | ease-in-out |
 | `cursor` | `pointer` | instant | — |
 
+**Responsive pattern**:
+```
+@media (hover: hover) and (pointer: fine) {
+  .btn:hover {
+    background-color: /* lighten/darken 5-10% */;
+    box-shadow: /* elevated */;
+  }
+}
+```
+
 **Accessibility**:
 - Never put critical info only in hover.
 - Reduced motion: keep color change, remove translateY.
@@ -56,6 +88,8 @@ Microinteraction patterns for buttons (primary, secondary, icon buttons, CTAs, s
 ---
 
 ## 3. Loading
+
+**Platform**: All.
 
 **Intent**: Button triggered an async action; user must wait.
 
@@ -91,6 +125,8 @@ Microinteraction patterns for buttons (primary, secondary, icon buttons, CTAs, s
 
 ## 4. Success
 
+**Platform**: All.
+
 **Intent**: Confirm the action completed successfully.
 
 **Trigger**: Programmatic — after successful response.
@@ -113,6 +149,8 @@ Microinteraction patterns for buttons (primary, secondary, icon buttons, CTAs, s
 
 ## 5. Error
 
+**Platform**: All.
+
 **Intent**: Communicate that the action failed.
 
 **Trigger**: Programmatic — after failed response or validation.
@@ -130,10 +168,13 @@ Microinteraction patterns for buttons (primary, secondary, icon buttons, CTAs, s
 **Accessibility**:
 - `aria-live="assertive"` for error messages.
 - Reduced motion: no shake, instant color change.
+- **Mobile**: consider haptic feedback (short vibration) alongside visual.
 
 ---
 
 ## 6. Disabled
+
+**Platform**: All (with cursor differences).
 
 **Intent**: Show button is not currently interactive.
 
@@ -145,20 +186,20 @@ Microinteraction patterns for buttons (primary, secondary, icon buttons, CTAs, s
 |----------|-------|-----------|--------|
 | `opacity` | 0.5–0.6 | 150 ms | ease-in-out |
 | `background-color` | desaturated/gray | 150 ms | ease-in-out |
-| `cursor` | `not-allowed` | instant | — |
+| `cursor` | `not-allowed` (desktop only) | instant | — |
 | `pointer-events` | `none` | instant | — |
 
 **Accessibility**:
 - Native `disabled` for form buttons.
 - `aria-disabled="true"` for custom buttons.
-- Consider tooltip explaining why.
+- Consider tooltip explaining why (desktop: hover tooltip; mobile: info icon).
 
 ---
 
 ## State Machine
 
 ```
-          +---- hover ----+
+          +---- hover ----+   (desktop only)
           |               |
 default --+---- focus ----+-- pressed --+-- loading --+-- success --> default
           |               |             |             +-- error ----> default

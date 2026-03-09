@@ -4,7 +4,25 @@ Microinteraction patterns for cards (content cards, product cards, list items, t
 
 ---
 
-## 1. Hover (Desktop)
+## Platform Notes
+
+| Intent | Mobile | Desktop | Responsive |
+|--------|--------|---------|------------|
+| Hover (lift/shadow) | **Not applicable** | `:hover` | `@media (hover: hover)` only |
+| Press / Active | `:active` (primary feedback) | `:active` | Both |
+| Expand / Collapse | Same | Same | Same |
+| Drag / Reorder | Long press + drag | Click + drag | Both (different triggers) |
+| Skeleton | Same | Same | Same |
+
+**On mobile**: Section 1 (Hover) does not apply. The `:active` state (Section 2) becomes the sole touch feedback.
+
+**On responsive**: wrap hover styles in `@media (hover: hover) and (pointer: fine) { }`.
+
+---
+
+## 1. Hover (Desktop Only)
+
+**Platform**: Desktop only. Skip on mobile. Wrap in `@media (hover: hover)` for responsive.
 
 **Intent**: Signal that the card is interactive.
 
@@ -17,6 +35,16 @@ Microinteraction patterns for cards (content cards, product cards, list items, t
 | `transform: scale` (alt.) | 1.01–1.02 | 150–200 ms | ease-out |
 | `cursor` | `pointer` | instant | — |
 
+**Responsive pattern**:
+```
+@media (hover: hover) and (pointer: fine) {
+  .card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+  }
+}
+```
+
 **Rules**:
 - Choose either lift (translateY) or scale, not both.
 - If the card has a CTA button, card hover should be subtler than button hover.
@@ -28,6 +56,8 @@ Microinteraction patterns for cards (content cards, product cards, list items, t
 
 ## 2. Press / Active
 
+**Platform**: All (this is the primary feedback on mobile).
+
 **Intent**: Confirm the click/tap.
 
 **Trigger**: `mousedown` / `touchstart`.
@@ -37,9 +67,15 @@ Microinteraction patterns for cards (content cards, product cards, list items, t
 | `transform: scale` | 0.98–0.99 | 80–120 ms | ease-out |
 | `box-shadow` | Reduce elevation | 80–120 ms | ease-out |
 
+**Mobile-specific**:
+- Add `-webkit-tap-highlight-color: transparent`.
+- Optionally darken background slightly (5%) for extra feedback since there's no hover precursor.
+
 ---
 
 ## 3. Expand / Collapse (Accordion)
+
+**Platform**: All.
 
 **Intent**: Reveal or hide additional content.
 
@@ -61,9 +97,13 @@ Microinteraction patterns for cards (content cards, product cards, list items, t
 
 ## 4. Drag / Reorder
 
+**Platform**: All (different triggers per platform).
+
 **Intent**: Dragging to reorder or move.
 
-**Trigger**: Long press / drag handle.
+**Trigger**:
+- **Mobile**: Long press (~300 ms) then drag.
+- **Desktop**: Click drag handle or click + drag.
 
 | Element | Behavior | Duration | Easing |
 |---------|----------|----------|--------|
@@ -89,7 +129,9 @@ Summary: gray rectangles matching content layout, pulse or shimmer, crossfade to
 ## State Machine
 
 ```
-default --+-- hover --> press --> action (navigate, expand, etc.)
+          +-- hover (desktop) -+
+          |                    |
+default --+--------------------+-- press --> action (navigate, expand, etc.)
           +-- skeleton (loading) --> default
           +-- dragging --> dropped --> default
           +-- expanded <--> collapsed

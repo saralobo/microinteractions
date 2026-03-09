@@ -4,7 +4,29 @@ Microinteraction patterns for tab bars, page transitions, pull-to-refresh, scrol
 
 ---
 
+## Platform Notes
+
+| Intent | Mobile | Desktop | Responsive |
+|--------|--------|---------|------------|
+| Tab switch | Tap + swipe between tabs | Click | Both |
+| Tab hover | **Not applicable** | `:hover` color/bg change | `@media (hover: hover)` only |
+| Page transition | Slide (gesture-driven) | Crossfade or slide | Both |
+| Pull-to-refresh | Yes (native pattern) | **Not applicable** | Mobile only |
+| Scroll effects | Use sparingly | Parallax, sticky header | Both (with care) |
+| Bottom nav | Primary mobile navigation | **Not typical** | Mobile only |
+| Sidebar nav | Not typical | Yes | Desktop only (or drawer on mobile) |
+
+**On mobile**: the bottom navigation bar uses only tap (`:active`) feedback. No hover on nav items.
+
+**On desktop**: tab bars and sidebar links get hover feedback.
+
+**On responsive**: wrap tab/link hover in `@media (hover: hover) and (pointer: fine) { }`.
+
+---
+
 ## 1. Tab / Segment Switch
+
+**Platform**: All.
 
 **Intent**: Switch between content sections.
 
@@ -21,7 +43,7 @@ Microinteraction patterns for tab bars, page transitions, pull-to-refresh, scrol
 **Rules**:
 - Indicator physically travels between tabs.
 - Content direction matches tab position.
-- Mobile: swipe between content areas.
+- **Mobile**: swipe between content areas (gesture-driven).
 
 **Accessibility**:
 - `role="tablist"`, `role="tab"`, `role="tabpanel"`.
@@ -30,7 +52,32 @@ Microinteraction patterns for tab bars, page transitions, pull-to-refresh, scrol
 
 ---
 
-## 2. Page Transition
+## 2. Tab / Link Hover
+
+**Platform**: Desktop only. Skip on mobile. Wrap in `@media (hover: hover)` for responsive.
+
+**Trigger**: `mouseenter` / `:hover`.
+
+| Property | Hover value | Duration | Easing |
+|----------|------------|----------|--------|
+| `color` | Active or intermediate color | 100–150 ms | ease-in-out |
+| `background-color` (opt.) | Subtle highlight (5–10% opacity) | 100–150 ms | ease-in-out |
+
+**Responsive pattern**:
+```
+@media (hover: hover) and (pointer: fine) {
+  .nav-item:hover {
+    color: var(--color-active);
+    background-color: rgba(255, 255, 255, 0.05);
+  }
+}
+```
+
+---
+
+## 3. Page Transition
+
+**Platform**: All.
 
 **Forward (deeper)**:
 
@@ -47,9 +94,13 @@ Microinteraction patterns for tab bars, page transitions, pull-to-refresh, scrol
 | Current page | Slide out right + fade | 200–300 ms | acceleration |
 | Previous page | Slide in from left + fade | 200–300 ms | deceleration |
 
+**Mobile-specific**: back gesture (swipe from left edge) drives transition interactively.
+
 ---
 
-## 3. Pull-to-Refresh
+## 4. Pull-to-Refresh
+
+**Platform**: Mobile only. Not applicable on desktop.
 
 **Intent**: Pull down to refresh content.
 
@@ -69,7 +120,9 @@ Microinteraction patterns for tab bars, page transitions, pull-to-refresh, scrol
 
 ---
 
-## 4. Scroll Effects
+## 5. Scroll Effects
+
+**Platform**: Both (with caution on mobile).
 
 ### Sticky Header
 
@@ -79,7 +132,7 @@ Microinteraction patterns for tab bars, page transitions, pull-to-refresh, scrol
 | Shadow on scroll | box-shadow appears | 100 ms, ease-out |
 | Background blur (opt.) | backdrop-filter: blur(8px) | instant |
 
-### Parallax (Use Sparingly)
+### Parallax (Use Sparingly — Desktop preferred)
 
 | Element | Scroll speed |
 |---------|--------------|
@@ -99,13 +152,16 @@ Purely decorative. Disable for `prefers-reduced-motion`.
 
 ---
 
-## 5. Bottom Navigation (Mobile)
+## 6. Bottom Navigation (Mobile)
+
+**Platform**: Mobile only (or responsive as mobile-only breakpoint).
 
 | Element | Behavior | Duration | Easing |
 |---------|----------|----------|--------|
 | Active icon | Scale 1.0 to 1.15, color to primary | 150–200 ms | spring(400, 0.85) |
 | Active label | Fade in + slide up | 150 ms | ease-out |
 | Previous icon | Scale 1.15 to 1.0, color to inactive | 150–200 ms | ease-out |
+| Tap feedback (`:active`) | Scale 0.97, darken bg | 80–120 ms | ease-out |
 | Ripple (opt.) | Circular from tap | 300 ms | deceleration |
 | Content | Crossfade | 150–250 ms | ease-in-out |
 
@@ -113,6 +169,7 @@ Purely decorative. Disable for `prefers-reduced-motion`.
 - 3–5 destinations max.
 - Active state immediately clear.
 - Tapping active tab scrolls to top.
+- **No hover feedback** — mobile only.
 
 **Accessibility**: Same as tabs. Min tap target: 48x48 dp. Reduced motion: instant, keep color.
 
