@@ -77,6 +77,36 @@ Ask or detect:
 
 ---
 
+### When the Component Is Not in the Catalog
+
+If the user's component type has **no dedicated pattern file** (e.g. slider, chip, badge, breadcrumb, pagination, avatar, tag, rating stars, list item), do the following:
+
+1. **Acknowledge** that this component type is not yet in the pattern catalog.
+
+2. **Suggest the closest match** from the catalog and offer to apply it as a baseline:
+   - **Slider / range input** → input (focus, value change) or progress (drag, thumb feedback).
+   - **Chip / tag / badge (clickable)** → button (click feedback, hover, selected state) or card (press, hover).
+   - **Breadcrumb** → navigation (link/tab-like feedback).
+   - **Pagination** → button (per control) + navigation (page change).
+   - **Avatar (clickable)** → button or card (press, hover).
+   - **Rating stars / thumbs up** → button (per item) or toggle (selected state).
+   - **Accordion (standalone)** → card (expand/collapse).
+   - **List row (clickable)** → card (hover, press).
+
+3. **Offer the user two paths**:
+   - **Option A — Use closest pattern**: *"There isn't a dedicated pattern for [component]. The closest is [X]. I can apply [list intents from that pattern]. Proceed?"*
+   - **Option B — Define ad hoc**: *"We can define a minimal microinteraction from scratch. What should happen on [click / hover / change]? I'll use the same timing and principles as the rest of the catalog."*
+
+4. **If applying without a pattern (Option B)**:
+   - Use **theory/saffer-model.md**: define trigger, rules, feedback (and loops/modes if relevant).
+   - Use **theory/timing-and-easing.md**: e.g. press 80–120 ms, state change 150–300 ms, standard or deceleration easing.
+   - Use **theory/principles.md**: subtlety (e.g. scale 0.95–0.98), accessibility (focus, reduced motion), consistency.
+   - Prefer borrowing values from the closest pattern (e.g. button-like: scale 0.97, 80–120 ms, ease-out).
+
+5. **Do not create a new pattern file** in the repository unless the user explicitly asks to document it for future use. For the session, applying via closest match or ad hoc is enough.
+
+---
+
 ### Step 3 — Apply
 
 When applying a pattern:
