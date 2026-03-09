@@ -23,6 +23,7 @@ It's the *behavior layer* that sits on top of your existing components.
 1. **For AI agents**: Read [`AGENT.md`](./AGENT.md) first. It contains the conversation strategy and decision tree.
 2. **For humans**: Browse [`patterns/`](./patterns/) and find your component type.
 3. **For theory**: Read [`theory/`](./theory/) to understand the foundational model.
+4. **For visible motion** (chart build-in, stagger, count-up, progress ring): Read [`theory/motion-patterns.md`](./theory/motion-patterns.md).
 
 ## Repository Structure
 
@@ -33,21 +34,23 @@ microinteractions/
 ├── theory/
 │   ├── saffer-model.md       # The 4-part model: Triggers → Rules → Feedback → Loops & Modes
 │   ├── timing-and-easing.md  # Duration, easing curves, per-device guidelines
-│   └── principles.md         # UX laws, accessibility, signature moments
+│   ├── principles.md         # UX laws, accessibility, signature moments
+│   ├── platform-rules.md     # Mobile vs Desktop vs Responsive (hover, touch, cursor)
+│   └── motion-patterns.md    # Chart build-in, stagger reveal, count-up, progress ring, layered reveal
 └── patterns/
     ├── README.md             # Index + intent-to-pattern mapping
-    ├── button.md             # Click, loading, success, error, disabled, hover
-    ├── input.md              # Focus, validation, error, disabled, filled, password strength
-    ├── toggle.md             # On/off, loading, disabled
-    ├── card.md               # Hover, press, expand, drag, skeleton
-    ├── toast.md              # Enter, auto-dismiss, action, stacking
-    ├── modal.md              # Open, close, backdrop, focus trap, shake
-    ├── dropdown.md           # Open, close, selection, search, multi-select
-    ├── skeleton.md           # Pulse, wave, content transition
-    ├── progress.md           # Determinate, indeterminate, steps, upload
-    ├── fab.md                # Idle, press, expand, morph
-    ├── tooltip.md            # Show, hide, delay, position
-    └── navigation.md         # Tab switch, page transition, pull-to-refresh, scroll
+    ├── button.md
+    ├── input.md
+    ├── toggle.md
+    ├── card.md
+    ├── toast.md
+    ├── modal.md
+    ├── dropdown.md
+    ├── skeleton.md
+    ├── progress.md
+    ├── fab.md
+    ├── tooltip.md
+    └── navigation.md
 ```
 
 ## The Saffer Model (TL;DR)
@@ -71,11 +74,24 @@ Every microinteraction has four parts:
 - **Accessible**: Always respect `prefers-reduced-motion`. Always provide non-motion alternatives.
 - **Layered**: Add behavior on top of the existing design. Never redesign.
 
+## Motion & animation (beyond microinteractions)
+
+When the goal is **visible motion** — charts that build in, numbers that count up, cards that stagger in, progress rings that fill — use [`theory/motion-patterns.md`](./theory/motion-patterns.md). It covers:
+
+- **Chart build-in**: Bars/area/line animate from baseline on load (800–1200 ms).
+- **Staggered reveal**: Lists and grids enter with 30–80 ms delay between items (max 10–15 items).
+- **Count-up**: Key metrics animate from 0 to value (1.5–2 s).
+- **Progress ring fill**: Circular progress draws from 0% to target (500–800 ms).
+- **Layered reveal**, **state-to-state continuity**, **alert-first motion**.
+
+Motion should be a **clarity layer**, not decoration. All patterns respect `prefers-reduced-motion`.
+
 ## References
 
 - Saffer, D. (2013). *Microinteractions: Designing with Details*. O'Reilly Media.
 - [Material Design 3 — Motion](https://m3.material.io/styles/motion)
 - [Apple HIG — Animation](https://developer.apple.com/design/human-interface-guidelines/animation)
+- [Motion Design for Data Dashboards: 7 Practical Patterns](https://themotiondot.com/blog/motion-design-data-dashboards-7-patterns) (The Motion Dot)
 - [Web Content Accessibility Guidelines (WCAG) 2.2](https://www.w3.org/TR/WCAG22/)
 - Norman, D. (2013). *The Design of Everyday Things*. Basic Books.
 
